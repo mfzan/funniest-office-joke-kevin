@@ -17,8 +17,15 @@ JOKE = (
 
 OUTPUT_PATH = "/output/entry.txt"
 
+# The sealed scorer only accepts 1-200 characters, one line, not only
+# whitespace. Refuse to write anything outside that gate rather than
+# shipping an entry the judge never sees.
+MAX_CHARS = 200
+
 
 def main() -> int:
+    if not JOKE.strip() or "\n" in JOKE or len(JOKE) > MAX_CHARS:
+        raise ValueError("joke fails the 1-200 character single-line gate")
     os.makedirs("/output", exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as handle:
         handle.write(JOKE)
